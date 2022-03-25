@@ -1,0 +1,7 @@
+youtube_dl
+django
+django-heroku
+gunicorn
+whitenoise
+python-telegram-bot
+pyTelegramBotAPI
