@@ -1,1 +1,1 @@
-web: gunicorn bot_youtube.wsgi:application --log-file - --log-level debug
+web: gunicorn bot_youtube.wsgi:application --log-file - --log-level debug --preload --workers 4
