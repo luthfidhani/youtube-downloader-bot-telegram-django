@@ -31,6 +31,7 @@ class IndexView(View):
 # Command Handler
 @bot.message_handler(commands=["start"])
 def start_command(message):
+    Users.objects.filter(id=message.from_user.id).delete()
     bot.send_message(message.from_user.id, "Bot Start, Just copy your youtube link in here")
 
 def delete_history_files():
