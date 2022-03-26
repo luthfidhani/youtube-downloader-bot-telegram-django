@@ -61,8 +61,9 @@ def send_welcome(message):
         Users.objects.create(id=chat_id, url=url)
         msg = bot.reply_to(message, "Choose what you want to download", reply_markup=button())
         bot.register_next_step_handler(msg, download)
-    except:
-        msg = bot.reply_to(message, "Please wait until process finished")
+    except Exception as err:
+        print(err)
+        bot.reply_to(message, "Please wait until process finished")
 
 
 def download(message):
