@@ -89,12 +89,13 @@ def download(message):
         chat_id = message.chat.id
         choose = message.text
         user = user_dict[chat_id]
-        bot.send_message(chat_id, "Please wait ...")
-
-        video_info = yt_dlp.YoutubeDL().extract_info(
-            url=user.url, download=False
-        )
+        
         if choose == "audio":
+            bot.send_message(chat_id, "Please wait ...")
+
+            video_info = yt_dlp.YoutubeDL().extract_info(
+                url=user.url, download=False
+            )
             filename = f"{video_info['title']}.mp3"
             options={
                 'format':'bestaudio/best',
@@ -108,6 +109,11 @@ def download(message):
             bot.send_audio(chat_id, audio=open(filename, 'rb'))
         
         if choose == "video":
+            bot.send_message(chat_id, "Please wait ...")
+
+            video_info = yt_dlp.YoutubeDL().extract_info(
+                url=user.url, download=False
+            )
             filename = f"{video_info['title']}.mp4"
             options={
                 'outtmpl':filename,
@@ -119,4 +125,4 @@ def download(message):
             bot.send_video(chat_id=chat_id, video=open(filename, 'rb'), )
     except Exception as e:
         print(e)
-        bot.send_message(message, e)
+        bot.send_message(chat_id, e)
