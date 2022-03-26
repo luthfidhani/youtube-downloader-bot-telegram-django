@@ -5,3 +5,7 @@ gunicorn
 whitenoise
 python-telegram-bot
 pyTelegramBotAPI
+requests
+sqlalchemy
+psycopg2
+dj_database_url
