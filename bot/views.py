@@ -45,6 +45,11 @@ def mp4_handler(message):
     Handler(message).mp4()
 
 
+@bot.message_handler(func=lambda call: call.text == "cancel")
+def mp4_handler(message):
+    Handler(message).cancel()
+
+
 @bot.message_handler(content_types=["text"])
 def text_handler(message):
     Handler(message).text()
