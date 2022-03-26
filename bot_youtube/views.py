@@ -110,7 +110,6 @@ def download(message):
         if choose == "video":
             filename = f"{video_info['title']}.mp4"
             options={
-                'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
                 'outtmpl':filename,
             }
 
@@ -120,4 +119,4 @@ def download(message):
             bot.send_video(chat_id=chat_id, video=open(filename, 'rb'), )
     except Exception as e:
         print(e)
-        bot.reply_to(message, 'oooops')
+        bot.send_message(message, e)
