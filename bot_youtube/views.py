@@ -5,11 +5,10 @@ import yt_dlp
 import glob
 from telebot import types
 from telebot.types import Update
-from django.http.response import HttpResponse
-from django.core.exceptions import PermissionDenied
 from django.conf import settings
 from django.views import View
-from bot_youtube.handler import handler, send_welcome
+from django.http.response import HttpResponse
+from django.core.exceptions import PermissionDenied
 
 
 bot = telebot.TeleBot(settings.BOT_TOKEN)
