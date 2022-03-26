@@ -1,7 +1,7 @@
 import os
 import time
 import telebot
-import youtube_dl
+import yt_dlp
 import glob
 from telebot import types
 from telebot.types import Update
@@ -90,31 +90,33 @@ def download(message):
         chat_id = message.chat.id
         choose = message.text
         user = user_dict[chat_id]
+        bot.send_message(chat_id, "Please wait ...")
 
-        video_info = youtube_dl.YoutubeDL().extract_info(
+        video_info = yt_dlp.YoutubeDL().extract_info(
             url=user.url, download=False
         )
         if choose == "audio":
-            bot.send_message(chat_id, "Please wait ...")
             filename = f"{video_info['title']}.mp3"
-            options = {
-                "format": "bestaudio/best",
-                "keepvideo": False,
-                "outtmpl": filename,
+            options={
+                'format':'bestaudio/best',
+                'keepvideo':False,
+                'outtmpl':filename,
             }
-            with youtube_dl.YoutubeDL(options) as ydl:
-                ydl.download([video_info["webpage_url"]])
+
+            with yt_dlp.YoutubeDL(options) as ydl:
+                ydl.download([video_info['webpage_url']])
                 
             bot.send_audio(chat_id, audio=open(filename, 'rb'))
         
         if choose == "video":
-            bot.send_message(chat_id, "Please wait ...")
             filename = f"{video_info['title']}.mp4"
-            options = {
-                "outtmpl": filename,
+            options={
+                'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+                'outtmpl':filename,
             }
-            with youtube_dl.YoutubeDL(options) as ydl:
-                ydl.download([video_info["webpage_url"]])
+
+            with yt_dlp.YoutubeDL(options) as ydl:
+                ydl.download([video_info['webpage_url']])
 
             bot.send_video(chat_id=chat_id, video=open(filename, 'rb'), )
     except Exception as e:
