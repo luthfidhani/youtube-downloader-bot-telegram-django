@@ -4,7 +4,7 @@ cd $(dirname $0)/..
 
 export ALLOWED_HOSTS=${ALLOWED_HOSTS:-*}
 export SERVICE_NAME=${SERVICE_NAME:-youtube-downloader-bot-telegram}
-export SERVICE_SA=${SERVICE_SA:-197169329270-compute@developer.gserviceaccount.com}
+export SERVICE_ACCOUNT=${SERVICE_ACCOUNT:-197169329270-compute@developer.gserviceaccount.com}
 export GOOGLE_CLOUD_PROJECT=${GOOGLE_CLOUD_PROJECT:-luthfi-project-367206}
 export DEPLOY_REGION=${DEPLOY_REGION:-us-central1}
 export IMAGE_NAME=gcr.io/${GOOGLE_CLOUD_PROJECT}/${SERVICE_NAME}
@@ -14,3 +14,5 @@ export REVISION_SUFFIX=$(echo ${IMAGE_VERSION} | sed 'y/./-/')
 # Django env
 export DEBUG=${DEBUG:-False}
 export BOT_TOKEN=${BOT_TOKEN}
+export BOT_USERNAME=${BOT_USERNAME:-@svyt_bot}
+export URL=${URL:-https://youtube-downloader-bot-telegram-cgjeq44x2q-uc.a.run.app}

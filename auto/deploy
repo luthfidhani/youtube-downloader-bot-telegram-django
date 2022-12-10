@@ -9,9 +9,9 @@ gcloud run deploy $SERVICE_NAME \
     --region $DEPLOY_REGION \
     --platform managed \
     --memory 512Mi \
-    --cpu 2 \
+    --cpu 0 \
     --concurrency 80 \
     --allow-unauthenticated \
-    --service-account $SERVICE_SA \
-    --set-env-vars DEBUG=$DEBUG,ALLOWED_HOSTS=$ALLOWED_HOSTS \
+    --service-account $SERVICE_ACCOUNT \
+    --set-env-vars DEBUG=$DEBUG,ALLOWED_HOSTS=$ALLOWED_HOSTS,BOT_TOKEN=$BOT_TOKEN,BOT_USERNAME=$BOT_USERNAME,URL=$URL \
     --revision-suffix $REVISION_SUFFIX
