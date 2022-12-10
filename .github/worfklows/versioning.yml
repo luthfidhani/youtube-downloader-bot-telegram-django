@@ -39,9 +39,6 @@ jobs:
       - name: Copy .env files
         run: cp .env.example .env
 
-      - name: Checking
-        run: ./auto/check
-
       - name: Testing
         run: ./auto/test
 
