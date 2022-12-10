@@ -1,0 +1,47 @@
+name: deploy
+
+on:
+  push:
+    tags:
+      - v**
+
+  workflow_dispatch:
+    inputs:
+      api_version:
+        description: "BOT version e.g. v1.0.0"
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      LD_LIBRARY_PATH: /usr/local/lib
+      TAG_NAME: ${{ inputs.api_version || github.ref_name }}
+      BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v3
+        with:
+          ref: refs/tags/${{ env.TAG_NAME }}
+
+      - name: Authenticate with google cloud
+        uses: google-github-actions/auth@v0.5.0
+        with:
+          workload_identity_provider: ${{ secrets.GHA_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GHA_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+
+      - name: Register gcloud as Docker credential helper
+        run: gcloud auth configure-docker gcr.io -q
+
+      - name: Build and push container images
+        run: ./auto/release
+
+      - name: Deploy container image to Cloud Run
+        run: ./auto/deploy
