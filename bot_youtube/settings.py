@@ -75,26 +75,13 @@ TEMPLATES = [
 WSGI_APPLICATION = "bot_youtube.wsgi.application"
 
 
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-MODE = os.environ.get(
-    "MODE",
-    default='prod'
-)
 
-if MODE == 'prod': # Deploy On Heroku
-    import django_heroku
-    django_heroku.settings(locals())
-    DATABASES = {
-        'default': dj_database_url.config(default=os.environ.get("DATABASE_URL"))
-        }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 

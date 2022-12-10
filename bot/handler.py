@@ -89,6 +89,6 @@ class Handler:
     def cancel(self):
         try:
             Users.objects.filter(id=self.id).delete()
-            bot.send_message(self.id, "Canceled", reply_markup=self.start_button())
+            bot.send_message(self.id, "Canceled")
         except Exception as e:
             bot.send_message(self.id, e)
