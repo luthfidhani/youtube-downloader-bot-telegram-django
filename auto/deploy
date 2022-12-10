@@ -1,0 +1,17 @@
+#!/bin/bash -eu
+
+cd $(dirname $0)/..
+
+source ./auto/config
+
+gcloud run deploy $SERVICE_NAME \
+    --image $IMAGE_NAME:$IMAGE_VERSION \
+    --region $DEPLOY_REGION \
+    --platform managed \
+    --memory 512Mi \
+    --cpu 2 \
+    --concurrency 80 \
+    --allow-unauthenticated \
+    --service-account $SERVICE_SA \
+    --set-env-vars DEBUG=$DEBUG,ALLOWED_HOSTS=$ALLOWED_HOSTS \
+    --revision-suffix $REVISION_SUFFIX

@@ -1,0 +1,13 @@
+branches: ["main"]
+tagFormat: "v${version}"
+plugins:
+  [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/github",
+  ]
+dryRun: false
+debug: true
+# Try to scope to only current folder.
+commitPaths: ["."]
+ci: false # Try to publish even though Gcloud isn't picked up as a CI environment.
