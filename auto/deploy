@@ -10,6 +10,7 @@ gcloud run deploy $SERVICE_NAME \
     --platform managed \
     --memory 512Mi \
     --cpu 1 \
+    --port 8000 \
     --concurrency 80 \
     --allow-unauthenticated \
     --service-account $SERVICE_ACCOUNT \
