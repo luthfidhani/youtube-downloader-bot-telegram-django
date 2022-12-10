@@ -14,9 +14,6 @@ jobs:
     env:
       # https://github.com/openssl/openssl/issues/5845#issuecomment-378601109
       LD_LIBRARY_PATH: /usr/local/lib
-    defaults:
-      run:
-        working-directory: ./services/api
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v3
