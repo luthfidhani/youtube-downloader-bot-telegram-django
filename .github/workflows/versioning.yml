@@ -1,0 +1,50 @@
+name: versioning
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      # https://github.com/openssl/openssl/issues/5845#issuecomment-378601109
+      LD_LIBRARY_PATH: /usr/local/lib
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          fetch-depth: 0
+
+      - name: Authenticate with google cloud
+        uses: google-github-actions/auth@v0.5.0
+        with:
+          workload_identity_provider: ${{ secrets.GHA_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GHA_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+
+      - name: Copy ADC to well-known location (User Config Directory)
+        run: cp $GOOGLE_APPLICATION_CREDENTIALS $HOME/.config/gcloud/application_default_credentials.json
+
+      - name: Copy .env files
+        run: cp .env.example .env
+
+      - name: Testing
+        run: ./auto/test
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.18
+
+      - name: Create new version
+        run: npx semantic-release-plus
+        env:
+          GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
