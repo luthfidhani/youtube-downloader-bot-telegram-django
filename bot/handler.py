@@ -29,7 +29,7 @@ class Handler:
     def start_button(self):
         types.ReplyKeyboardRemove()
         markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
-        markup.add("cancel")
+        markup.add("start")
         return markup
     
     def text(self):
@@ -44,21 +44,23 @@ class Handler:
             user = Users.objects.filter(id=self.id)
             user.update(status="downloading")
             bot.send_message(self.id, "Please wait ...", reply_markup=self.cancel_button())
-            video_info = yt_dlp.YoutubeDL().extract_info(
-                url=user[0].url, download=False
-            )
-            filename = f"{video_info['title']}.mp3"
-            options={
-                'format':'bestaudio/best',
-                'keepvideo':False,
-                'outtmpl':filename,
+            
+            options = {
+                'format': 'bestaudio/best',
+                'outtmpl': '%(title)s.%(ext)s',
+                'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': 'mp3',
+                    'preferredquality': '192',
+                }],
             }
-
             with yt_dlp.YoutubeDL(options) as ydl:
-                ydl.download([video_info['webpage_url']])
+                info = yt_dlp.YoutubeDL().extract_info(url=user[0].url) # It will also automatically download the mp3
+                
+            filename = info["title"]+".mp3"
             bot.send_audio(self.id, audio=open(filename, 'rb'), reply_markup=self.start_button())
-            user.delete()
-            os.remove(filename)
+            user.delete() # Delete user from database
+            os.remove(filename) # Delete file from local
         except Exception as e:
             user.delete()
             bot.send_message(self.id, e)
@@ -68,20 +70,19 @@ class Handler:
             user = Users.objects.filter(id=self.id)
             user.update(status="downloading")
             bot.send_message(self.id, "Please wait ...", reply_markup=self.cancel_button())
-            video_info = yt_dlp.YoutubeDL().extract_info(
-                url=user[0].url, download=False
-            )
-            filename = f"{video_info['title']}.mp4"
-            options={
-                'outtmpl':filename,
+            
+            options = {
+                'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+                'outtmpl': '%(title)s.%(ext)s',
             }
-
             with yt_dlp.YoutubeDL(options) as ydl:
-                ydl.download([video_info['webpage_url']])
+                info = yt_dlp.YoutubeDL().extract_info(url=user[0].url) # It will also automatically download the mp3
+                
+            filename = info["title"]+".mp4"
 
             bot.send_video(chat_id=self.id, video=open(filename, 'rb'), reply_markup=self.start_button())
-            user.delete()
-            os.remove(filename)
+            user.delete() # Delete user from database
+            os.remove(filename) # Delete file from local
         except Exception as e:
             user.delete()
             bot.send_message(self.id, e)
